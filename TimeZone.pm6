@@ -18,13 +18,17 @@ class NYT-TZ does TimeZone {
 
 class foo {
 	multi method eek() returns Int { 1 }
-	mulit method eek() returns Str { 's' }
+	multi method eek() returns Str { 's' }
 }
 
 use Test;
 
-is (+foo.new.eek(), 1, 'foo Int');
-is (+foo.new.eek(), 's', 'foo Str');
+my $f = foo.new();
+
+my Int $i = $f.eek();
+dd $i;
+#is ($i, 1); #, 'foo Int');
+#is (~$f.eek(), 's'); #, 'foo Str');
 
 constant dt = 60 * 60 * 4;
 constant name = 'America/New_York';
