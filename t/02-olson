@@ -1,7 +1,7 @@
 use Test;
 use Olson-TZ;
 
-plan 3;
+plan 5;
 
 # fixtures
 my DateTime $new-years .= new('2014-01-01T12:00:00');
@@ -13,3 +13,12 @@ my $tz = Olson-TZ.new(name => name);
 is($tz.name, name, 'name');
 is($tz.abbreviation($new-years.Instant), tz, 'abbr');
 is($tz.utc-offset-in-seconds($new-years.Instant), dt, 'dt');
+
+my $tznow = qx/date +%Z/.chop;
+my $dt = do given $tznow {
+	when 'EST'	{ dt }
+	when 'EDT'	{ dt + 60 * 60 }
+	default		{ Failure.new("can't determine current timezone") }
+}
+is($tz.abbreviation(), $tznow, 'current abbr');
+is($tz.utc-offset-in-seconds(), $dt, 'current offset');
