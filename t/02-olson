@@ -1,5 +1,4 @@
 use Test;
-use TimeZone;
 use Olson-TZ;
 
 plan 3;
