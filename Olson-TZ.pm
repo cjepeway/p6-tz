@@ -52,11 +52,11 @@ class Olson-TZ does TimeZone {
 		localtime_rz($!olson-timezone, IntPointer.new(i => $t.Int), $tm);
 	}
 
-	method utc-offset-in-seconds(:(Instant $when? = now)) returns Int {
+	method utc-offset-in-seconds(Instant $when? = now) returns Int {
 		return self.tm($when).gmtoff;
 	}
 
-	method abbreviation(:(Instant $when? = now)) {
+	method abbreviation(Instant $when? = now) {
 		return self.tm($when).zone;
 	}
 }
