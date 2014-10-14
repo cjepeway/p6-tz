@@ -6,4 +6,5 @@ role TimeZone {
 
 	method Numeric() { self.utc-offset-in-seconds() }
 	method Str() { self.abbreviation() }
+	method Int() { self.Numeric() }
 }
