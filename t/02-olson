@@ -13,3 +13,5 @@ is($tz.abbreviation(), tz, 'abbr');
 is(~$tz, tz, ".Str()");
 is($tz.utc-offset-in-seconds(), dt, 'dt');
 is(+$tz, dt, ".Numeric()");
+
+done;

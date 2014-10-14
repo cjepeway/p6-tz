@@ -1,5 +1,5 @@
 P6 = perl6
-PROVE = $(P6) -I.
+PROVE = prove --nocolor -e '$(P6) -I.'
 export LD_LIBRARY_PATH = /lib:/usr/lib:$(HOME)/lib
 
 .PHONY: all test DNE
@@ -8,4 +8,5 @@ export LD_LIBRARY_PATH = /lib:/usr/lib:$(HOME)/lib
 t/% : DNE ; $(PROVE) $@
 
 all:	test
-test: 	t/*
+test: 	
+	$(PROVE) t/*
