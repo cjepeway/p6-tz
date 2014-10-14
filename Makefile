@@ -1,8 +1,8 @@
 P6 = perl6
-HARNESS = $(P6) -I.
+PROVE = $(P6) -I.
 
 .PHONY: all test
 
 all:	test
-test: 
-	$(HARNESS) t/*
+test: 	t/*
+	@for i in $? ; do echo $(PROVE) $$i ; $(PROVE) $$i ; done

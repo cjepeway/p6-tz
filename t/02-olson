@@ -1,12 +1,12 @@
 use Test;
 use TimeZone;
-use NYC-TZ;
+use Olson-TZ;
 
 # fixtures
 constant dt = 60 * 60 * 4;
 constant name = 'America/New_York';
 constant tz = 'EDT';
-my $tz = NYC-TZ.new();
+my $tz = Olson-TZ.new(name => name);
 
 is($tz.name, name, 'name');
 is($tz.abbreviation(), tz, 'abbr');
