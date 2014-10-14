@@ -12,6 +12,7 @@ my $tz = NYC-TZ.new();
 
 is($tz.name, name, 'name');
 is($tz.abbreviation(), tz, 'abbr');
+is($tz.abbreviation(now), any('EDT'|'EST'), 'abbr w/ arg');
 is(~$tz, tz, ".Str()");
 is($tz.utc-offset-in-seconds(), dt, 'dt');
 is(+$tz, dt, ".Numeric()");
