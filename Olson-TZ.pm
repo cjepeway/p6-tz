@@ -35,7 +35,7 @@ sub localtime_rz(OpaquePointer, int) returns tm is native('libtz') { * }
 class Olson-TZ does TimeZone { 
 	has OpaquePointer $!olson-timezone;
 
-	submethod BUILD() {
+	submethod BUILD(:$!name) {
 		$!olson-timezone = tzalloc($!name);	
 	}
 
@@ -44,10 +44,10 @@ class Olson-TZ does TimeZone {
 	}
 
 	method utc-offset-in-seconds(:(Instant $when? = now)) returns Int {
-		return self.tm($when).gmtoff;
+		return self.tm($when.Int).gmtoff;
 	}
 
 	method abbreviation(:(Instant $when? = now)) {
-		return self.tm($when).zone;
+		return self.tm($when.Int).zone;
 	}
 }
