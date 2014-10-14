@@ -8,10 +8,10 @@ constant name = 'America/New_York';
 constant tz = 'EDT';
 my $tz = Olson-TZ.new(name => name);
 
+plan 5;
+
 is($tz.name, name, 'name');
 is($tz.abbreviation(), tz, 'abbr');
 is(~$tz, tz, ".Str()");
 is($tz.utc-offset-in-seconds(), dt, 'dt');
 is(+$tz, dt, ".Numeric()");
-
-done;
