@@ -1,5 +1,6 @@
 use Test;
 use TimeZone;
+use NYT-TZ;
 
 # fixtures
 constant dt = 60 * 60 * 4;
