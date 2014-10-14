@@ -2,13 +2,13 @@ use Test;
 use TimeZone;
 use Olson-TZ;
 
+plan 5;
+
 # fixtures
 constant dt = -4 * 60 * 60;
 constant name = 'America/New_York';
 constant tz = 'EDT';
 my $tz = Olson-TZ.new(name => name);
-
-plan 5;
 
 is($tz.name, name, 'name');
 is($tz.abbreviation(), tz, 'abbr');
