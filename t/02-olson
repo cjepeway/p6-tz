@@ -2,16 +2,15 @@ use Test;
 use TimeZone;
 use Olson-TZ;
 
-plan 5;
+plan 3;
 
 # fixtures
-constant dt = -4 * 60 * 60;
+my DateTime $new-years .= new('2014-01-01T12:00:00');
+constant dt = -5 * 60 * 60;
 constant name = 'America/New_York';
-constant tz = 'EDT';
-my $tz = Olson-TZ.new(name => name);
+constant tz = 'EST';
 
+my $tz = Olson-TZ.new(name => name);
 is($tz.name, name, 'name');
-is($tz.abbreviation(), tz, 'abbr');
-is(~$tz, tz, ".Str()");
-is($tz.utc-offset-in-seconds(), dt, 'dt');
-is(+$tz, dt, ".Numeric()");
+is($tz.abbreviation($new-years.Instant), tz, 'abbr');
+is($tz.utc-offset-in-seconds($new-years.Instant), dt, 'dt');

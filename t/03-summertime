@@ -1,16 +1,13 @@
 use Test;
 use Olson-TZ;
-use NYC-TZ;
 
-plan 8;
+plan 4;
 
 my DateTime  $hot-nyc .= new('2011-07-22T12:00:00');	# summer time was in effect
 my DateTime $cold-nyc .= new('1994-01-19T12:00:00'); 	# standard time in effect
 
-for NYC-TZ.new, Olson-TZ.new(name => 'America/New_York') -> $tz {
-    my $tag = "({$tz.^name})";
-    is $tz.utc-offset-in-seconds($cold-nyc.Instant), -5*60*60, "standard time offset $tag";
-    is $tz.utc-offset-in-seconds($hot-nyc.Instant),  -4*60*60, "summer time offset $tag";
-    is $tz.abbreviation($cold-nyc.Instant), 'EST', "standard time abbr $tag";
-    is $tz.abbreviation($hot-nyc.Instant), 'EDT', "summer time abbr $tag";
-}
+my $tz = Olson-TZ.new(name => 'America/New_York');
+is $tz.utc-offset-in-seconds($cold-nyc.Instant), -5*60*60, "standard time offset";
+is $tz.utc-offset-in-seconds($hot-nyc.Instant),  -4*60*60, "summer time offset";
+is $tz.abbreviation($cold-nyc.Instant), 'EST', "standard time abbr";
+is $tz.abbreviation($hot-nyc.Instant), 'EDT', "summer time abbr";

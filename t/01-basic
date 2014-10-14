@@ -1,18 +1,18 @@
 use Test;
 use TimeZone;
-use NYC-TZ;
+use EDT-TZ;
 
 plan 6;
 
 # fixtures
 constant dt = -4 * 60 * 60;
-constant name = 'America/New_York';
-constant tz = 'EDT';
-my $tz = NYC-TZ.new();
+constant name = 'EDT';
+constant tz = name;
+my $tz = EDT-TZ.new();
 
 is($tz.name, name, 'name');
 is($tz.abbreviation(), tz, 'abbr');
-is($tz.abbreviation(now), any('EDT'|'EST'), 'abbr w/ arg');
+is($tz.abbreviation(now), 'EDT', 'abbr w/ arg');
 is(~$tz, tz, ".Str()");
 is($tz.utc-offset-in-seconds(), dt, 'dt');
 is(+$tz, dt, ".Numeric()");
