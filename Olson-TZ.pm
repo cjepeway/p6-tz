@@ -25,15 +25,29 @@ my class tm is repr('CStruct') {
 	has int $.wday;     # day of week (Sunday = 0)
 	has int $.yday;     # day of year (0–365)
 	has int $.isdst;    # is summer time in effect?
-	has CPointer $.zone;# abbreviation of time zone name
+	has Str $.zone;     # abbreviation of time zone name
 	has int $.gmtoff;   # offset from UT in seconds
 }
 
 sub tzalloc(Str) returns OpaquePointer is native('libtz') { * }
+sub localtime_rz(OpaquePointer, int) returns tm is native('libtz') { * }
 
 class Olson-TZ does TimeZone { 
 	has OpaquePointer $!olson-timezone;
-	submethod BUILD(Str $name) {
-		$!olson-timezone = tzalloc($name);	
+
+	submethod BUILD() {
+		$!olson-timezone = tzalloc($!name);	
+	}
+
+	method tm(int $t) {
+		return localtime_rz($!olson-timezone, $t);
+	}
+
+	method utc-offset-in-seconds(:(Instant $when? = now)) returns Int {
+		return self.tm($when).gmtoff;
+	}
+
+	method abbreviation(:(Instant $when? = now)) {
+		return self.tm($when).zone;
 	}
 }
