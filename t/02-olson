@@ -1,0 +1,15 @@
+use Test;
+use TimeZone;
+use NYC-TZ;
+
+# fixtures
+constant dt = 60 * 60 * 4;
+constant name = 'America/New_York';
+constant tz = 'EDT';
+my $tz = NYC-TZ.new();
+
+is($tz.name, name, 'name');
+is($tz.abbreviation(), tz, 'abbr');
+is(~$tz, tz, ".Str()");
+is($tz.utc-offset-in-seconds(), dt, 'dt');
+is(+$tz, dt, ".Numeric()");
