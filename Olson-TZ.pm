@@ -24,21 +24,21 @@ my class Long is repr('CStruct') {
 }
 
 my class tm is repr('CStruct') {
-	has int $.sec;		# seconds (0–60)
-	has int $.min;		# minutes (0–59)
-	has int $.hour;		# hours (0–23)
-	has int $.mday;		# day of month (1–31)
-	has int $.mon;		# month of year (0–11)
-	has int $.year;		# year - 1900
-	has int $.wday;		# day of week (Sunday = 0)
-	has int $.yday;		# day of year (0–365)
-	has int $.isdst;	# is summer time in effect?
-	has Str $.zone;		# abbreviation of time zone name
-	has Long $.gmtoff;	# offset from UT in seconds
+	has int32 $.sec;	# seconds (0–60)
+	has int32 $.min;	# minutes (0–59)
+	has int32 $.hour;	# hours (0–23)
+	has int32 $.mday;	# day of month (1–31)
+	has int32 $.mon;	# month of year (0–11)
+	has int32 $.year;	# year - 1900
+	has int32 $.wday;	# day of week (Sunday = 0)
+	has int32 $.yday;	# day of year (0–365)
+	has int32 $.isdst;	# is summer time in effect?
+	has   int $.gmtoff;	# offset from UT in seconds
+	has   Str $.zone;	# abbreviation of time zone name
 }
 
 sub tzalloc(Str) returns OpaquePointer is native('libtz') { * }
-sub localtime_rz(OpaquePointer, IntPointer) returns tm is native('libtz') { * }
+sub localtime_rz(OpaquePointer, IntPointer, tm) returns tm is native('libtz') { * }
 
 class Olson-TZ does TimeZone { 
 	has OpaquePointer $!olson-timezone;
@@ -49,15 +49,11 @@ class Olson-TZ does TimeZone {
 
 	method tm(Instant $t) {
 		my tm $tm .= new;
-		say "    tm: $tm";
-		say "tm.sec: $tm.sec";
-		dd $tm;
-		return localtime_rz($!olson-timezone, IntPointer.new(i => $t.Int), $tm);
+		localtime_rz($!olson-timezone, IntPointer.new(i => $t.Int), $tm);
 	}
 
 	method utc-offset-in-seconds(:(Instant $when? = now)) returns Int {
-		my Long $l = self.tm($when).gmtoff;
-		return $l.bottom ?? $l.bottom !! $l.top;
+		return self.tm($when).gmtoff;
 	}
 
 	method abbreviation(:(Instant $when? = now)) {
