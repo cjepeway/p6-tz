@@ -8,4 +8,4 @@ my DateTime $utc .= new(:year(2014), :month(6), :day(2));
 my DateTime $ist .= new(:year(2014), :month(6), :day(2), :timezone($tz));
 
 is $tz.utc-offset-in-seconds($utc.Instant), 60 * 60, 'IST offset';
-is $ist.posix - $utc.posix, 60 * 60, 'posix difference';
+ok $ist.posix > $utc.posix, 'IST ahead of GMT';
