@@ -1,11 +1,14 @@
 use Test;
 use Olson-TZ;
 
-plan 2;
+plan 3;
 
 my Olson-TZ $tz .= new(name => 'Europe/Dublin');
-my DateTime $utc .= new(:year(2014), :month(6), :day(2), :hour(12));
-my DateTime $ist .= new(:year(2014), :month(6), :day(2), :hour(13), :timezone($tz));
+my DateTime $utc-hot .= new(:year(2014), :month(6), :day(2), :hour(12));
+my DateTime $ist-hot .= new(:year(2014), :month(6), :day(2), :hour(13), :timezone($tz));
+my DateTime $utc-cold .= new(:year(2014), :month(2), :day(2), :hour(12));
+my DateTime $gmt-cold .= new(:year(2014), :month(2), :day(2), :hour(12), :timezone($tz));
 
-is $tz.utc-offset-in-seconds($utc.Instant), 60 * 60, 'IST offset';
-is $utc.posix - $ist.posix, 0, 'noon GMT is 1P IST';
+is $tz.utc-offset-in-seconds($utc-hot.Instant), 60 * 60, 'IST offset';
+is $utc-hot.posix - $ist-hot.posix, 0, 'noon UTC is 1P IST in Dublin on summer days';
+is $utc-cold.posix - $gmt-cold.posix, 0, 'noon UTC is noon GMT in Dublin on winter days';
