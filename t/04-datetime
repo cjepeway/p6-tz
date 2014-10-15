@@ -4,8 +4,8 @@ use Olson-TZ;
 plan 2;
 
 my Olson-TZ $tz .= new(name => 'Europe/Dublin');
-my DateTime $utc .= new(:year(2014), :month(6), :day(2));
-my DateTime $ist .= new(:year(2014), :month(6), :day(2), :timezone($tz));
+my DateTime $utc .= new(:year(2014), :month(6), :day(2), :hour(12));
+my DateTime $ist .= new(:year(2014), :month(6), :day(2), :hour(13), :timezone($tz));
 
 is $tz.utc-offset-in-seconds($utc.Instant), 60 * 60, 'IST offset';
-ok $ist.posix > $utc.posix, 'IST ahead of GMT';
+is $utc.posix - $ist.posix, 0, 'noon GMT is 1P IST';
