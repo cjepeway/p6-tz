@@ -1,7 +1,7 @@
 use Test;
 use Olson-TZ;
 
-plan 1;
+plan 2;
 
 my Olson-TZ $tz .= new(name => 'Europe/Dublin');
 my DateTime $utc .= new(:year(2014), :month(6), :day(2));
