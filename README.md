@@ -3,7 +3,7 @@ p6-tz
 
 toy implementation of timezones for perl6
 
-In it's current incarnation, this module hooks into the [IANA Olson TZ library](https://github.com/eggert/tz)
+In its current incarnation, this module hooks into the [IANA Olson TZ library](https://github.com/eggert/tz)
 via NativeCall.
 
 ### Building a Shared Version of the Olson DB ###
