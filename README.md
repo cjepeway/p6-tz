@@ -14,7 +14,7 @@ First, download the sucker from https://github.com/eggert/tz.
 Then, build it as a shared library:
 
 ```
-  $ make LDFLAGS=-shared CFLAGS=-fpic -g -DNETBSD_INSPIRED clean all
+  $ make LDFLAGS=-shared CFLAGS='-fpic -g -DNETBSD_INSPIRED' clean all
   $ ld -fpic -shared -o libtz.so localtime.o asctime.o difftime.o
 ```
 
