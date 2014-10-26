@@ -44,4 +44,4 @@ so the test fails.
 Ah, but how isn't it right?  That's a tale for another commit,
 but for now, suffice it to say that the problem seems to me
 to be that DateTime expects TZ offsets to remain static
-when instead they are a function of the current time.
+when instead they are a function of the time to which they are applied.
