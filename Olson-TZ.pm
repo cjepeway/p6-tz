@@ -15,12 +15,8 @@ use NativeCall;
 	long tm_gmtoff;  /∗ offset from UT in seconds ∗/
 }
 
-my class IntPointer is repr('CStruct') {
+my class LongPointer is repr('CStruct') {
 	has int $.i;
-}
-
-my class Long is repr('CStruct') {
-	has int ($.top, $.bottom);
 }
 
 my class tm is repr('CStruct') {
@@ -38,7 +34,7 @@ my class tm is repr('CStruct') {
 }
 
 sub tzalloc(Str) returns OpaquePointer is native('libtz') { * }
-sub localtime_rz(OpaquePointer, IntPointer, tm) returns tm is native('libtz') { * }
+sub localtime_rz(OpaquePointer, LongPointer, tm) returns tm is native('libtz') { * }
 
 class Olson-TZ does TimeZone { 
 	has OpaquePointer $!olson-timezone;
@@ -49,7 +45,7 @@ class Olson-TZ does TimeZone {
 
 	method tm(Instant $t) {
 		my tm $tm .= new;
-		localtime_rz($!olson-timezone, IntPointer.new(i => $t.Int), $tm);
+		localtime_rz($!olson-timezone, LongPointer.new(i => $t.Int), $tm);
 	}
 
 	method utc-offset-in-seconds(Instant $when? = now) returns Int {
