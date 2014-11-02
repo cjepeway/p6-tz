@@ -1,7 +1,11 @@
 use Test;
 use Olson-TZ;
 
-plan 5;
+plan 7;
+
+my Olson-TZ $tz .= new;
+is($tz.abbreviation(), 'UTC', 'default to UTC - abbr');
+is($tz.utc-offset-in-seconds(), 0, 'default to UTC - offset');
 
 # fixtures
 my DateTime $new-years .= new('2014-01-01T12:00:00');
@@ -9,7 +13,7 @@ constant dt = -5 * 60 * 60;
 constant name = 'America/New_York';
 constant tz = 'EST';
 
-my $tz = Olson-TZ.new(name => name);
+$tz = Olson-TZ.new(name => name);
 is($tz.name, name, 'name');
 is($tz.abbreviation($new-years.Instant), tz, 'abbr');
 is($tz.utc-offset-in-seconds($new-years.Instant), dt, 'dt');

@@ -39,7 +39,7 @@ sub localtime_rz(OpaquePointer, LongPointer, tm) returns tm is native('libtz') {
 class Olson-TZ does TimeZone { 
 	has OpaquePointer $!olson-timezone;
 
-	submethod BUILD(:$!name) {
+	submethod BUILD(:$!name = 'UTC') {
 		$!olson-timezone = tzalloc($!name);	
 	}
 
