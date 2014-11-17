@@ -11,7 +11,7 @@ my $tz = EDT-TZ.new();
 
 is($tz.name, name, 'name');
 is($tz.abbreviation(), tz, 'abbr');
-is($tz.abbreviation(now), 'EDT', 'abbr w/ arg');
+is($tz.abbreviation(time), 'EDT', 'abbr w/ arg');
 is(~$tz, tz, ".Str()");
 is($tz.utc-offset-in-seconds(), dt, 'dt');
 is(+$tz, dt, ".Numeric()");
