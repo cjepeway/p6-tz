@@ -2,19 +2,28 @@ use Test;
 use Olson-TZ;
 use DateTimeX;
 
-plan 1;
+plan 2;
 
 # pick a timezone that isn't ours
 my Olson-TZ $tz;
 my $off;
 if $*TZ == -(4|5) * 60 * 60 {
     $tz .= new(name => 'America/Los_Angeles');
-    $off = -7 * 60 * 60;
+    $off = -8 * 60 * 60;
 } else {
     $tz .= new(name => 'America/New_York');
-    $off = -4 * 60 * 60;
+    $off = -5 * 60 * 60;
 }
 
-my DateTimeX $time-change-utc   = DateTimeX.new(:year(2014), :month(11), :day(2), :hour(2)).earlier(seconds => $off);
-my DateTimeX $time-change-local = $time-change-utc.in-timezone($tz);
-is(+$time-change-local, +$time-change-utc, 'US summer -> standard transition in 2014');
+my $time-change-utc   = DateTimeX.new(:year(2014), :month(3), :day(9), :hour(2), :seconds(1)).earlier(seconds => $off);
+my $time-change-local = $time-change-utc.in-timezone($tz);
+diag $time-change-utc;
+diag $time-change-local;
+is($time-change-local.hour, 3, 'US standard -> summer transition in 2014');
+
+$off += 60 * 60;
+$time-change-utc   = DateTimeX.new(:year(2014), :month(11), :day(2), :hour(2), :seconds(1)).earlier(seconds => $off);
+$time-change-local = $time-change-utc.in-timezone($tz);
+diag $time-change-utc;
+diag $time-change-local;
+is($time-change-local.hour, 1, 'US summer -> standard transition in 2014');
