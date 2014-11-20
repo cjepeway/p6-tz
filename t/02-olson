@@ -20,11 +20,12 @@ is($tz.name, name, 'name');
 is($tz.abbreviation($new-years.posix), tz, 'abbr');
 is($tz.utc-offset-in-seconds($new-years.posix), dt, 'dt');
 
+%*ENV<TZ> = name;
 my $tznow = qx/date +%Z/.chop;
 my $dt = do given $tznow {
 	when 'EST'	{ dt }
 	when 'EDT'	{ dt + 60 * 60 }
-	default		{ Failure.new("can't determine current timezone") }
+	default		{ fail("can't get current timezone abbreviation for {name}") }
 }
-is($tz.abbreviation(), $tznow, 'current abbr');
-is($tz.utc-offset-in-seconds(), $dt, 'current offset');
+is($tz.abbreviation(), $tznow, 'US/Eastern current abbr');
+is($tz.utc-offset-in-seconds(), $dt, 'US/Eastern current offset');
