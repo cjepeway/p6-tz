@@ -2,7 +2,7 @@ use Test;
 use Olson-TZ;
 use DateTimeX;
 
-plan 2;
+plan 5;
 
 # pick a timezone that isn't ours
 my Olson-TZ $tz;
@@ -15,15 +15,28 @@ if $*TZ == -(4|5) * 60 * 60 {
     $off = -5 * 60 * 60;
 }
 
-my $time-change-utc   = DateTimeX.new(:year(2014), :month(3), :day(9), :hour(2), :seconds(1)).earlier(seconds => $off);
+my $time-change-utc   = DateTimeX.new(:year(2014), :month(3), :day(9), :hour(2), :minute(0), :second(0)).earlier(seconds => $off);
 my $time-change-local = $time-change-utc.in-timezone($tz);
 diag $time-change-utc;
 diag $time-change-local;
-is($time-change-local.hour, 3, 'US standard -> summer transition in 2014');
+is($time-change-local.hour, 3, "{$tz.name} standard -> summer transition in 2014");
 
 $off += 60 * 60;
-$time-change-utc   = DateTimeX.new(:year(2014), :month(11), :day(2), :hour(2), :seconds(1)).earlier(seconds => $off);
+$time-change-utc   = DateTimeX.new(:year(2014), :month(11), :day(2), :hour(2), :minute(0), :second(0)).earlier(seconds => $off);
 $time-change-local = $time-change-utc.in-timezone($tz);
 diag $time-change-utc;
 diag $time-change-local;
-is($time-change-local.hour, 1, 'US summer -> standard transition in 2014');
+is($time-change-local.hour, 1, "{$tz.name} summer -> standard transition in 2014");
+
+
+$tz .= new(name => 'Europe/Dublin');
+my DateTimeX  $utc-hot .= new(:year(2014), :month(6), :day(2), :hour(12));
+my DateTimeX  $ist-hot .= new(:year(2014), :month(6), :day(2), :hour(13), :timezone($tz));	# summer time was in effect
+my DateTimeX $utc-cold .= new(:year(2014), :month(2), :day(2), :hour(12));
+my DateTimeX $gmt-cold .= new(:year(2014), :month(2), :day(2), :hour(12), :timezone($tz));	# standard/gm time was in effect
+
+diag 'utc: ' ~ $utc-hot.perl ~ "\n" ~ '.ie: ' ~$ist-hot.perl;
+diag 'utc:' ~ $utc-cold.perl ~ "\n" ~ '.ie: ' ~$gmt-cold.perl;
+is $tz.utc-offset-in-seconds($utc-hot.posix), 60 * 60, 'IST offset';
+is   $utc-hot.posix - $ist-hot.posix, 0, 'noon UTC is 1P IST in Dublin on summer days';
+is $utc-cold.posix - $gmt-cold.posix, 0, 'noon UTC is noon GMT in Dublin on winter days';
