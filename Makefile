@@ -1,5 +1,5 @@
 P6 = perl6
-PROVE = prove --nocolor -e '$(P6) -I.'
+PROVE = prove --nocolor -e '$(P6) -I $(PWD)'
 export LD_LIBRARY_PATH = /lib:/usr/lib:$(HOME)/lib
 
 .PHONY: all test clean DNE
