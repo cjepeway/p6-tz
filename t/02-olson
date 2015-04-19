@@ -1,7 +1,7 @@
 use Test;
 use Olson-TZ;
 
-plan 9;
+plan 10;
 
 my Olson-TZ $tz .= new;
 is($tz.abbreviation(), 'UTC', 'default to UTC - abbr');
@@ -19,6 +19,7 @@ $tz = Olson-TZ.new(name => name);
 is($tz.name, name, 'name');
 is($tz.abbreviation($new-years.posix), tz, 'abbr');
 is($tz.utc-offset-in-seconds($new-years.posix), dt, 'dt');
+is($tz.perl(), "Olson-TZ.new(name => \"{name}\")", '.perl()');
 
 %*ENV<TZ> = name;
 my $tznow = qx/date +%Z/.chop;
