@@ -1,6 +1,7 @@
 sbox
 core
 a.out
+*.swp
 *~
 *-
 ,*
