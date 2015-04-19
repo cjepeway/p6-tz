@@ -2,24 +2,25 @@ use TimeZone;
 use UTC-TZ;
 
 class DateTimeX is DateTime {
-#    multi method in-timezone(Int $offset) returns DateTimeX {
-#	say ">1\n", Backtrace.new.concise;
-#	self.WHAT.note:
-#	die 'too deep'
-#		if Backtrace.new.concise.gist.comb(/\n/).elems > 10;
-#	my DateTime $dt .= new(self.posix(True), :timezone($offset));
-#	return self.clone-without-validating(:year($dt.year), :month($dt.month), :day($dt.day),
-#					     :hour($dt.hour), :second($dt.second),
-#					     :timezone($dt.timezone),
-#					     :formatter($dt.formatter));
-#    }
+    method posix() {
+	self.timezone.mktime(self);
+    }
 
-    multi method in-timezone(TimeZone $tz) returns DateTimeX {
+    multi method in-timezone(Int $offset) returns DateTimeX {
+	say ">1\n", Backtrace.new.concise;
+	die 'too deep'
+		if Backtrace.new.concise.gist.comb(/\n/).elems > 10;
+	my DateTime $dt .= new(self.posix, :timezone($offset));
+	return self.clone-without-validating(:year($dt.year), :month($dt.month), :day($dt.day),
+					     :hour($dt.hour), :second($dt.second),
+					     :timezone($dt.timezone),
+					     :formatter($dt.formatter));
+    }
+
+    multi method in-timezone(TimeZone $tz) {
 	say ">2\n", Backtrace.new.concise;
-	#self.in-timezone(self.posix(True), :timezone($tz.utc-offset-in-seconds(self.posix(True))));
-	my DateTimeX $n .= new(self.posix(True), :timezone($tz.utc-offset-in-seconds(self.posix(True))));
-	.say for $n.WHAT, $n;
-	$n;
+	my DateTimeX $dtx .= new(self.posix, :timezone($tz.utc-offset-in-seconds(self.posix)));
+	$dtx.clone-without-validating(:timezone($tz));
     }
 
     multi method new(TimeZone :$timezone = UTC-TZ.new, *%_) {

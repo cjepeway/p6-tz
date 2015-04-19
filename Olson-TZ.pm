@@ -35,17 +35,27 @@ my class tm is repr('CStruct') {
 
 sub tzalloc(Str) returns OpaquePointer is native('libtz') { * }
 sub localtime_rz(OpaquePointer, LongPointer, tm) returns tm is native('libtz') { * }
+sub mktime_z(OpaquePointer, tm) returns int32 is native('libtz') { * }
 
 class Olson-TZ does TimeZone { 
 	has OpaquePointer $!olson-timezone;
 
 	submethod BUILD(:$!name = 'UTC') {
-		$!olson-timezone = tzalloc($!name);	
+		$!olson-timezone = tzalloc($!name);
 	}
 
-	method tm(Int $t) {
+	multi method tm(Int $t) {
 		my tm $tm .= new;
 		localtime_rz($!olson-timezone, LongPointer.new(i => $t.Int), $tm);
+	}
+
+	multi method tm(DateTime $dt) {
+		tm.new(sec => $dt.seconds,
+		       min => $dt.minutes,
+		       hour => $dt.hours,
+		       mday => $dt.day,
+		       year => $dt.year - 1900,
+		       gmtoff => $dt.timezone.Int);
 	}
 
 	method utc-offset-in-seconds(Int $when? = time) returns Int {
@@ -54,5 +64,9 @@ class Olson-TZ does TimeZone {
 
 	method abbreviation(Int $when? = time) {
 		return self.tm($when).zone;
+	}
+
+	method mktime(DateTime $dt) returns Int {
+		return mktime_z($!olson-timezone, self.tm($dt));
 	}
 }
