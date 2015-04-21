@@ -2,10 +2,21 @@ use Test;
 use Olson-TZ;
 use DateTimeX;
 
-plan 6;
+plan 7;
+
+my Olson-TZ $tz;
+
+#Tue Apr 21 09:41:17 EDT 2015
+#1429623677
+#Tue Apr 21 09:41:17 EDT 2015
+$tz .= new(name => 'America/New_York');
+my DateTimeX $_21_Apr_2015_09_41_17 .=
+    new(:year(2015), :month(4), :day(21),
+        :hour(9), :minute(41), :second(17),
+        :timezone($tz));
+is($_21_Apr_2015_09_41_17.posix - 1429623677, 0, 'seconds since posix epoch');
 
 # pick a timezone that isn't ours
-my Olson-TZ $tz;
 my $off;
 if $*TZ == -(4|5) * 60 * 60 {
     $tz .= new(name => 'America/Los_Angeles');
