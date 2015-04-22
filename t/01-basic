@@ -1,7 +1,7 @@
 use Test;
 use EDT-TZ;
 
-plan 7;
+plan 12;
 
 # fixtures
 constant dt = -4 * 60 * 60;
@@ -10,9 +10,14 @@ constant tz = name;
 my $tz = EDT-TZ.new();
 
 is($tz.name, name, 'name');
-is($tz.abbreviation(), tz, 'abbr');
-is($tz.abbreviation(time), 'EDT', 'abbr w/ arg');
+is($tz.abbreviation(), tz, 'abbr()');
+is($tz.abbreviation(0), 'EDT', 'abbr(0)');
+is($tz.abbreviation(time), 'EDT', 'abbr(now)');
+is($tz.abbreviation(DateTime.new(0)), 'EDT', 'abbr(DateTime)');
+is($tz.utc-offset-in-seconds(), dt, 'offset()');
+is($tz.utc-offset-in-seconds(0), dt, 'offset(0)');
+is($tz.utc-offset-in-seconds(time), dt, 'offset(now)');
+is($tz.utc-offset-in-seconds(DateTime.new(0)), dt, 'offset(DateTime)');
 is(~$tz, tz, ".Str()");
-is($tz.utc-offset-in-seconds(), dt, 'dt');
 is(+$tz, dt, ".Numeric()");
 is($tz.Int, dt, ".Int()");

@@ -1,7 +1,13 @@
 use TimeZone;
 
 class EDT-TZ does TimeZone {
-	method new() { self.bless(name => 'EDT'); }
-	method utc-offset-in-seconds(Int $when? = time) returns Int { -4 * 60 * 60 }
-	method abbreviation(Int $when? = time) returns Str { 'EDT' }
+	my constant utc-offset = -4 * 60 * 60;
+	my constant abbr = 'EDT';
+
+	method new() { self.bless(name => abbr); }
+
+	multi method utc-offset-in-seconds(Int $when? = time) returns Int { utc-offset }
+	multi method utc-offset-in-seconds(DateTime:D $when) returns Int { utc-offset }
+	multi method abbreviation(Int $when? = time) returns Str { abbr }
+	multi method abbreviation(DateTime:D $when) returns Str { abbr }
 }
