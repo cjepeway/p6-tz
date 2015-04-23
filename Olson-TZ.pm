@@ -63,7 +63,7 @@ class Olson-TZ does TimeZone {
 		return mktime_z($!olson-timezone, self.tm($dt));
 	}
 
-	multi method utc-offset-in-seconds(Int $when) returns Int {
+	multi method utc-offset-in-seconds(Int $when? = time) returns Int {
 		return self.tm($when).gmtoff;
 	}
 
