@@ -37,11 +37,11 @@ sub tzalloc(Str) returns OpaquePointer is native('libtz') { * }
 sub localtime_rz(OpaquePointer, LongPointer, tm) returns tm is native('libtz') { * }
 sub mktime_z(OpaquePointer, tm) returns int32 is native('libtz') { * }
 
-class Olson-TZ does TimeZone { 
+class Olson-TZ is TimeZone { 
 	has OpaquePointer $!olson-timezone;
 
-	submethod BUILD(:$!name = 'UTC') {
-		$!olson-timezone = tzalloc($!name);
+	submethod BUILD(:$name = 'UTC') {
+		$!olson-timezone = tzalloc($name);
 	}
 
 	multi method tm(Int $t) {
@@ -56,7 +56,7 @@ class Olson-TZ does TimeZone {
 		       mday => $dt.day,
 		       year => $dt.year - 1900,
 		       isdst => -1,
-		       gmtoff => $dt.timezone.Int);
+		       ); #gmtoff => $dt.timezone.Int);
 	}
 
 	method mktime(DateTime $dt) returns Int {
@@ -68,7 +68,7 @@ class Olson-TZ does TimeZone {
 	}
 
 	multi method utc-offset-in-seconds(DateTime $when) returns Int {
-		nextwith(self.mktime($when));
+		callwith(self.mktime($when));
 	}
 
 	multi method abbreviation(Int $when? = time) {

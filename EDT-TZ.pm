@@ -1,6 +1,6 @@
 use TimeZone;
 
-class EDT-TZ does TimeZone {
+class EDT-TZ is TimeZone {
 	my constant utc-offset = -4 * 60 * 60;
 	my constant abbr = 'EDT';
 
