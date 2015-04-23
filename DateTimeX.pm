@@ -4,9 +4,9 @@ use UTC-TZ;
 class DateTimeX is DateTime {
     has TimeZone $.timezone;
 
-    method posix() {
-	callwith(True);
-    }
+#    method posix() {
+#	callwith(True);
+#    }
 
 #
 #	really, this method should fail(); if it were ever implemented, we'd know
