@@ -34,7 +34,7 @@ class DateTimeX is DateTime {
 
     multi method in-timezone(TimeZone $tz) {
 	say ">2\n", Backtrace.new.concise;
-	my DateTime $dt .= new(self.posix, :timezone($tz.utc-offset-in-seconds(self.posix)));
+	my DateTime $dt .= new(self.posix, :timezone($tz.utc-offset-in-seconds(self)));
 	return self.clone-without-validating(:year($dt.year), :month($dt.month), :day($dt.day),
 					     :hour($dt.hour), :second($dt.second),
 					     :timezone($tz),

@@ -50,23 +50,28 @@ class Olson-TZ does TimeZone {
 	}
 
 	multi method tm(DateTime $dt) {
-		tm.new(sec => $dt.seconds,
-		       min => $dt.minutes,
-		       hour => $dt.hours,
+		tm.new(sec => $dt.second,
+		       min => $dt.minute,
+		       hour => $dt.hour,
 		       mday => $dt.day,
 		       year => $dt.year - 1900,
+		       isdst => -1,
 		       gmtoff => $dt.timezone.Int);
-	}
-
-	multi method utc-offset-in-seconds(Int $when? = time) returns Int {
-		return self.tm($when).gmtoff;
-	}
-
-	multi method abbreviation(Int $when? = time) {
-		return self.tm($when).zone;
 	}
 
 	method mktime(DateTime $dt) returns Int {
 		return mktime_z($!olson-timezone, self.tm($dt));
+	}
+
+	multi method utc-offset-in-seconds(Int $when) returns Int {
+		return self.tm($when).gmtoff;
+	}
+
+	multi method utc-offset-in-seconds(DateTime $when) returns Int {
+		nextwith(self.mktime($when));
+	}
+
+	multi method abbreviation(Int $when? = time) {
+		return self.tm($when).zone;
 	}
 }

@@ -4,7 +4,7 @@ role TimeZone {
 	multi method utc-offset-in-seconds(::T $when where Int|DateTime) returns Int { ... }
 	multi method abbreviation(::T $when where Int|DateTime) returns Str { ... }
 
-	method Numeric() { self.utc-offset-in-seconds() }
+	method Numeric() { self.utc-offset-in-seconds(time) }
 	method Str() { self.abbreviation() }
 	method Int() { self.Numeric() }
 }
