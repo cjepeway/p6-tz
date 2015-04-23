@@ -58,11 +58,11 @@ class Olson-TZ does TimeZone {
 		       gmtoff => $dt.timezone.Int);
 	}
 
-	method utc-offset-in-seconds(Int $when? = time) returns Int {
+	multi method utc-offset-in-seconds(Int $when? = time) returns Int {
 		return self.tm($when).gmtoff;
 	}
 
-	method abbreviation(Int $when? = time) {
+	multi method abbreviation(Int $when? = time) {
 		return self.tm($when).zone;
 	}
 
