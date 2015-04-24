@@ -5,7 +5,7 @@ plan 10;
 
 my Olson-TZ $tz .= new;
 is($tz.abbreviation(), 'UTC', 'default to UTC - abbr');
-is($tz.utc-offset-in-seconds(), 0, 'default to UTC - offset');
+is($tz.utc-offset-in-seconds(0), 0, 'default to UTC - offset');
 is(~$tz, 'UTC', 'stringification works');
 is(+$tz, 0, 'numification works');
 
@@ -29,4 +29,4 @@ my $dt = do given $tznow {
 	default		{ fail("can't get current timezone abbreviation for {name}") }
 }
 is($tz.abbreviation(), $tznow, 'US/Eastern current abbr');
-is($tz.utc-offset-in-seconds(), $dt, 'US/Eastern current offset');
+is($tz.utc-offset-in-seconds(time), $dt, 'US/Eastern current offset');
