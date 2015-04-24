@@ -4,9 +4,9 @@ use UTC-TZ;
 class DateTimeX is DateTime {
     has TimeZone $.timezone;
 
-#    method posix() {
-#	callwith(True);
-#    }
+    method posix() {
+	callwith(True) - $.timezone.utc-offset-in-seconds(self);
+    }
 
 #
 #	really, this method should fail(); if it were ever implemented, we'd know
@@ -43,11 +43,14 @@ class DateTimeX is DateTime {
 
     multi method new(TimeZone :$timezone = UTC-TZ.new, *%_) {
 	say ">3\n", Backtrace.new.concise;
-	%_.say;
-	my DateTime $dt .= new(|%_);
-	$dt.perl.say;
 	$timezone.perl.say;
-	say '[ ', self.new($dt.earlier(seconds => $timezone.utc-offset-in-seconds($dt.posix)).posix, :$timezone).perl, ' ]';
-	self.new($dt.earlier(seconds => $timezone.utc-offset-in-seconds($dt.posix)).posix, :$timezone);
+	%_.say;
+	my $me = self.bless(:$timezone, |%_);
+	$me.perl.say;
+	$me;
+	#my $dtx = callwith(|%_);
+	#$dtx.perl.say;
+	#$dtx.timezone = $timezone;
+	#$dtx;
     }
 }
