@@ -5,6 +5,8 @@ class DateTimeX is DateTime {
     has TimeZone $.timezone;
 
     method posix() {
+	$.timezone.WHAT.say;
+	$.timezone.say;
 	callwith(True) - $.timezone.utc-offset-in-seconds(self);
     }
 
@@ -32,7 +34,7 @@ class DateTimeX is DateTime {
             ).in-timezone($timezone);
     }
 
-    multi method in-timezone(TimeZone $tz) {
+    multi method in-timezone(TimeZone:D $tz) {
 	say ">2\n", Backtrace.new.concise;
 	my DateTime $dt .= new(self.posix, :timezone($tz.utc-offset-in-seconds(self)));
 	return self.clone-without-validating(:year($dt.year), :month($dt.month), :day($dt.day),
