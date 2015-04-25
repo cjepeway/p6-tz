@@ -1,10 +1,11 @@
 class TimeZone {
 	has Str $.name;
 
-	multi method utc-offset-in-seconds(Int $when) returns Int { die; }
-	multi method utc-offset-in-seconds(DateTime $when) returns Int { die; }
-	multi method abbreviation(Int $when) returns Str { die; }
-	multi method abbreviation(DateTime $when) returns Str { die; }
+	method unimplemented($which) { die "abstract method unimplemented in subclass"; }
+	multi method utc-offset-in-seconds(Int $when) returns Int { self.unimplemented(&?ROUTINE); }
+	multi method utc-offset-in-seconds(DateTime $when) returns Int { self.unimplemented(&?ROUTINE); }
+	multi method abbreviation(Int $when) returns Str { self.unimplemented(&?ROUTINE); }
+	multi method abbreviation(DateTime $when) returns Str { self.unimplemented(&?ROUTINE); }
 
 	method Numeric() { self.utc-offset-in-seconds(time) }
 	method Str() { self.abbreviation() }
