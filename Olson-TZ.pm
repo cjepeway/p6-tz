@@ -64,12 +64,12 @@ class Olson-TZ is TimeZone {
 	}
 
 	multi method utc-offset-in-seconds(Int $when) returns Int {
-		say '1]';
+		#say '1]';
 		return self.tm($when).gmtoff;
 	}
 
 	multi method utc-offset-in-seconds(DateTime $when) returns Int {
-		say '2]';
+		#say '2]';
 		#nextwith(self.mktime($when));
 		return self.utc-offset-in-seconds(self.mktime($when));
 	}
