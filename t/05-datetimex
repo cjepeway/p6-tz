@@ -3,19 +3,28 @@ use UTC-TZ;
 use Olson-TZ;
 use DateTimeX;
 
-plan 7;
+plan 8;
 
 my Olson-TZ $tz;
 
+#Sun Apr 26 19:07:21 UTC 2015
+#1430075241
+$tz .= new(name => 'UTC');
+my DateTimeX $_26_Apr_2015_19_07_21 .=
+    new(:year(2015), :month(4), :day(26),
+        :hour(19), :minute(7), :second(21),
+        :timezone($tz));
+is $_26_Apr_2015_19_07_21.posix - 1430075241, 0, 'UTC - seconds since posix epoch';
+
+
 #Tue Apr 21 09:41:17 EDT 2015
 #1429623677
-#Tue Apr 21 09:41:17 EDT 2015
 $tz .= new(name => 'America/New_York');
 my DateTimeX $_21_Apr_2015_09_41_17 .=
     new(:year(2015), :month(4), :day(21),
         :hour(9), :minute(41), :second(17),
         :timezone($tz));
-is($_21_Apr_2015_09_41_17.posix - 1429623677, 0, 'seconds since posix epoch');
+is $_21_Apr_2015_09_41_17.posix - 1429623677, 0, 'American/New_York - seconds since posix epoch';
 
 # pick a timezone that isn't ours
 my $off;
@@ -27,18 +36,21 @@ if $*TZ == -(4|5) * 60 * 60 {
     $off = -5 * 60 * 60;
 }
 
+isa-ok DateTimeX.new(:year(2014), :month(3), :day(9), :hour(2), :minute(0), :second(0), :timezone(UTC-TZ.new)).timezone, UTC-TZ, 'new keeps timezone type';
+
+diag "starting";
 my $time-change-utc   = DateTimeX.new(:year(2014), :month(3), :day(9), :hour(2), :minute(0), :second(0), :timezone(UTC-TZ.new())).earlier(seconds => $off);
-my $time-change-local = $time-change-utc.in-timezone($tz);
 diag $time-change-utc;
+my $time-change-local = $time-change-utc.in-timezone($tz);
 diag $time-change-local;
-is($time-change-local.hour, 3, "{$tz.name} standard -> summer transition in 2014");
+is $time-change-local.hour, 3, "{$tz.name} standard -> summer transition in 2014";
 
 $off += 60 * 60;
 $time-change-utc   = DateTimeX.new(:year(2014), :month(11), :day(2), :hour(2), :minute(0), :second(0)).earlier(seconds => $off);
 $time-change-local = $time-change-utc.in-timezone($tz);
 diag $time-change-utc;
 diag $time-change-local;
-is($time-change-local.hour, 1, "{$tz.name} summer -> standard transition in 2014");
+is $time-change-local.hour, 1, "{$tz.name} summer -> standard transition in 2014";
 
 $tz .= new(name => 'Europe/Dublin');
 
