@@ -1,7 +1,7 @@
 class TimeZone {
 	has Str $.name;
 
-	method unimplemented($which) { die "abstract method unimplemented in subclass"; }
+	method unimplemented($which) is hidden-from-backtrace { die "abstract method unimplemented in subclass"; }
 	multi method utc-offset-in-seconds(Int $when) returns Int { self.unimplemented(&?ROUTINE); }
 	multi method utc-offset-in-seconds(DateTime $when) returns Int { self.unimplemented(&?ROUTINE); }
 	multi method abbreviation(Int $when) returns Str { self.unimplemented(&?ROUTINE); }
