@@ -1,7 +1,7 @@
 use Test;
 use Olson-TZ;
 
-plan 10;
+plan 15;
 
 my Olson-TZ $tz .= new;
 is($tz.abbreviation(), 'UTC', 'default to UTC - abbr');
@@ -10,16 +10,22 @@ is(~$tz, 'UTC', 'stringification works');
 is(+$tz, 0, 'numification works');
 
 # fixtures
-my DateTime $new-years .= new('2014-01-01T12:00:00');
 constant dt = -5 * 60 * 60;
 constant name = 'America/New_York';
 constant tz = 'EST';
+my DateTime $new-years  .= new('2014-01-01T12:00:00');
+my DateTime $lammas-day .= new('2015-08-01T12:00:00');
 
 $tz = Olson-TZ.new(name => name);
 is($tz.name, name, 'name');
-is($tz.abbreviation($new-years.posix), tz, 'abbr');
-is($tz.utc-offset-in-seconds($new-years.posix), dt, 'dt');
-is($tz.perl(), "Olson-TZ.new(name => \"{name}\")", '.perl()');
+for ('winter', $new-years, tz, dt),
+    ('summer', $lammas-day, tz.subst('S', 'D'), dt + 60 * 60)
+    -> $when, $t, $abbr, $dt {
+    is($tz.abbreviation($t), $abbr, "$when time abbreviation - DateTime");
+    is($tz.abbreviation($t.posix), $abbr, "$when time abbreviation - DateTime.posix()");
+    is($tz.utc-offset-in-seconds($t), $dt, "$when time UTC offset - DateTime.posix()");
+    is($tz.utc-offset-in-seconds($t.posix), $dt, "$when time UTC offset - DateTime.posix()");
+}
 
 %*ENV<TZ> = name;
 my $tznow = qx/date +%Z/.chop;
