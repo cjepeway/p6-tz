@@ -27,12 +27,20 @@ for ('winter', $new-years, tz, dt),
     is($tz.utc-offset-in-seconds($t.posix), $dt, "$when time UTC offset - DateTime.posix()");
 }
 
-%*ENV<TZ> = name;
-my $tznow = qx/date +%Z/.chop;
-my $dt = do given $tznow {
-	when 'EST'	{ dt }
-	when 'EDT'	{ dt + 60 * 60 }
-	default		{ fail("can't get current timezone abbreviation for {name}") }
+if $*KERNEL.name eq 'win32' {
+    skip "don't know how to learn local timezone on windows", 2;
+} else {
+    %*ENV<TZ> = name;
+    my $tznow = qx/date +%Z/.chop;
+    my $dt = do given $tznow {
+	when 'EST' { dt }
+	when 'EDT' { dt + 60 * 60 }
+	default	   { "don't know current timezone offset for {name}" }
+    }
+    if $dt ~~ Str {
+	skip "$dt - $tznow", 2;
+    } else {
+	is($tz.abbreviation(), $tznow, 'US/Eastern current abbr');
+	is($tz.utc-offset-in-seconds(time), $dt, 'US/Eastern current offset');
+    }
 }
-is($tz.abbreviation(), $tznow, 'US/Eastern current abbr');
-is($tz.utc-offset-in-seconds(time), $dt, 'US/Eastern current offset');
