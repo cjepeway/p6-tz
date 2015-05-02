@@ -1,7 +1,7 @@
 use Test;
 use Olson-TZ;
 
-plan 17;
+plan 19;
 
 my Olson-TZ $tz .= new;
 is($tz.abbreviation(), 'UTC', 'default to UTC - abbr');
