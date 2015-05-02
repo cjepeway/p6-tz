@@ -54,6 +54,7 @@ class Olson-TZ is TimeZone {
 		       min => $dt.minute,
 		       hour => $dt.hour,
 		       mday => $dt.day,
+		       mon => $dt.month,
 		       year => $dt.year - 1900,
 		       isdst => -1,
 		       ); #gmtoff => $dt.timezone.Int);
@@ -76,5 +77,9 @@ class Olson-TZ is TimeZone {
 
 	multi method abbreviation(Int $when? = time) {
 		return self.tm($when).zone;
+	}
+
+	multi method abbreviation(DateTime $when) {
+		return self.abbreviation(self.mktime($when));
 	}
 }
