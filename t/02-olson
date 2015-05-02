@@ -1,7 +1,7 @@
 use Test;
 use Olson-TZ;
 
-plan 15;
+plan 17;
 
 my Olson-TZ $tz .= new;
 is($tz.abbreviation(), 'UTC', 'default to UTC - abbr');
@@ -22,8 +22,10 @@ for ('winter', $new-years, tz, dt),
     ('summer', $lammas-day, tz.subst('S', 'D'), dt + 60 * 60)
     -> $when, $t, $abbr, $dt {
     is($tz.abbreviation($t), $abbr, "$when time abbreviation - DateTime");
+    is($tz.abbreviation($t.later(seconds => 0.1)), $abbr, "$when time abbreviation - DateTime with sub-seconds");
     is($tz.abbreviation($t.posix), $abbr, "$when time abbreviation - DateTime.posix()");
     is($tz.utc-offset-in-seconds($t), $dt, "$when time UTC offset - DateTime.posix()");
+    is($tz.abbreviation($t.later(seconds => 0.1)), $abbr, "$when time abbreviation - DateTime with sub-seconds");
     is($tz.utc-offset-in-seconds($t.posix), $dt, "$when time UTC offset - DateTime.posix()");
 }
 
