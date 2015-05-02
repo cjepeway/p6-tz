@@ -50,7 +50,7 @@ class Olson-TZ is TimeZone {
 	}
 
 	multi method tm(DateTime $dt) {
-		tm.new(sec => $dt.second,
+		tm.new(sec => $dt.second.floor,
 		       min => $dt.minute,
 		       hour => $dt.hour,
 		       mday => $dt.day,
