@@ -1,13 +1,15 @@
 use Test;
 use Olson-TZ;
 
-plan 6;
+plan 8;
 
 my Olson-TZ $tz .= new(name => 'Europe/Dublin');
 
 my DateTime $dt .= new(0, :timezone($tz));
 is($dt.timezone, $tz, '.new(Int) preserves :timezone');
 is($dt.later(seconds => 0).timezone, $tz, '.later() preserves :timezone');
+isa-ok($dt.utc.timezone, Olson-TZ, '.utc() preserves timezone class');
+isa-ok($dt.local.timezone, Olson-TZ, '.local() preserves timezone class');
 
 my DateTime  $utc-hot .= new(:year(2014), :month(6), :day(2), :hour(12));
 my DateTime  $ist-hot .= new(:year(2014), :month(6), :day(2), :hour(13), :timezone($tz));	# summer time was in effect

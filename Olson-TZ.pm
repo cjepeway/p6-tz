@@ -44,6 +44,14 @@ class Olson-TZ is TimeZone {
 		$!olson-timezone = tzalloc($name);
 	}
 
+	method utc() {
+		self.new();
+	}
+
+	method local() {
+		self.new(:name(Str));	# this passes a NULL to tzalloc, which will then return the local timezone
+	}
+
 	multi method tm(Int $t) {
 		my tm $tm .= new;
 		localtime_rz($!olson-timezone, LongPointer.new(i => $t.Int), $tm);

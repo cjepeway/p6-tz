@@ -6,4 +6,6 @@ class UTC-TZ is TimeZone {
 	multi method utc-offset-in-seconds(DateTime $when) returns Int { 0 }
 	multi method abbreviation(Int $when) returns Str { 'UTC' }
 	multi method abbreviation(DateTime $when) returns Str { 'UTC' }
+	method utc() { return self; }
+	method local() { die "UTC doesn't know local timezone"; }
 }
