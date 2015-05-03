@@ -10,6 +10,7 @@ t/% : DNE ; $(PROVE) -v $@
 all:	test
 
 test: 	
+	@$(P6) --version
 	$(PROVE) t/*
 
 clean:
