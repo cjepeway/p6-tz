@@ -38,24 +38,19 @@ if $*TZ == -(4|5) * 60 * 60 {
 
 isa-ok DateTimeX.new(:year(2014), :month(3), :day(9), :hour(2), :minute(0), :second(0), :timezone(UTC-TZ.new)).timezone, UTC-TZ, 'new keeps timezone type';
 
-constant DOESN'T-WORK = True;
-if DOESN'T-WORK {
-    skip "can't figure out how to implement utc-offset-in-seconds() methods in a subclass", 2;
-} else {
-    diag "starting";
-    my $time-change-utc   = DateTimeX.new(:year(2014), :month(3), :day(9), :hour(2), :minute(0), :second(0), :timezone(UTC-TZ.new())).earlier(seconds => $off);
-    diag $time-change-utc;
-    my $time-change-local = $time-change-utc.in-timezone($tz);
-    diag $time-change-local;
-    is $time-change-local.hour, 3, "{$tz.name} standard -> summer transition in 2014";
+diag "starting";
+my $time-change-utc   = DateTimeX.new(:year(2014), :month(3), :day(9), :hour(2), :minute(0), :second(0), :timezone(UTC-TZ.new())).earlier(seconds => $off);
+diag $time-change-utc;
+my $time-change-local = $time-change-utc.in-timezone($tz);
+diag $time-change-local;
+is $time-change-local.hour, 3, "{$tz.name} standard -> summer transition in 2014";
 
-    $off += 60 * 60;
-    $time-change-utc   = DateTimeX.new(:year(2014), :month(11), :day(2), :hour(2), :minute(0), :second(0)).earlier(seconds => $off);
-    $time-change-local = $time-change-utc.in-timezone($tz);
-    diag $time-change-utc;
-    diag $time-change-local;
-    is $time-change-local.hour, 1, "{$tz.name} summer -> standard transition in 2014";
-}
+$off += 60 * 60;
+$time-change-utc   = DateTimeX.new(:year(2014), :month(11), :day(2), :hour(2), :minute(0), :second(0)).earlier(seconds => $off);
+$time-change-local = $time-change-utc.in-timezone($tz);
+diag $time-change-utc;
+diag $time-change-local;
+is $time-change-local.hour, 1, "{$tz.name} summer -> standard transition in 2014";
 
 $tz .= new(name => 'Europe/Dublin');
 
