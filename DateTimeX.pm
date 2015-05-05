@@ -10,8 +10,7 @@ class DateTimeX is DateTime {
     }
 
     method posix() {
-	my $t = callwith(True);
-	$t - $.timezone.utc-offset-in-seconds(self);
+	callwith(True) - $.timezone.utc-offset-in-seconds(self);
     }
 
     method   utc() { return self.in-timezone($.timezone.utc);   }
