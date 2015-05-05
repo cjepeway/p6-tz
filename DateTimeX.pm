@@ -1,13 +1,18 @@
 use TimeZone;
 use UTC-TZ;
+use Olson-TZ;
 
 class DateTimeX is DateTime {
     has TimeZone:D $.timezone;
 
+    submethod BUILD(:$timezone = UTC-TZ.new, |) {
+	$!timezone = $timezone;
+    }
+
     method posix() {
 	#say ">0\n", Backtrace.new.concise;
-	say "<{self.perl}>";
-	say "[{$.timezone.perl}]";
+	#say "<{self.perl}>";
+	#say "[{$.timezone.perl}]";
 	#$.timezone.WHAT.say;
 	#$.timezone.utc-offset-in-seconds(self).say;
 	#say 'abbr: ', $.timezone.abbreviation(self);
@@ -19,18 +24,17 @@ class DateTimeX is DateTime {
     # stolen from DateTime
     multi method new(Instant:D $i, TimeZone :$timezone=UTC-TZ.new, :&formatter=&default-formatter) {
 	#say ">1\n", Backtrace.new.concise;
-	#$timezone.perl.say;
+	#say "[{$timezone.perl}]";
         my ($p, $leap-second) = $i.to-posix;
         my DateTimeX $dtx = self.new: floor($p - $leap-second).Int, :&formatter, :$timezone;
         $dtx.clone(second => ($dtx.second + $p % 1 + $leap-second)
             ).in-timezone($timezone);
     }
 
-    method   utc() { say "in .utc"; return self.in-timezone($.timezone.utc);   }
-    method local() { say "in .local"; return self.in-timezone($.timezone.local); }
+    method   utc() { return self.in-timezone($.timezone.utc);   }
+    method local() { return self.in-timezone($.timezone.local); }
 
     multi method in-timezone(Int $offset) returns DateTimeX {
-	say "in in-timezone(Int)";
 	given $offset {
 	    when 0	{ return self.utc();   }
 	    when +$*TZ	{ return self.local(); }
@@ -39,7 +43,6 @@ class DateTimeX is DateTime {
     }
 
     multi method in-timezone(TimeZone:D $tz) {
-	say "in in-timezone(TimeZone)";
 	#say ">2\n", Backtrace.new.concise;
 	#self.perl.say;
 	#$tz.perl.say;
