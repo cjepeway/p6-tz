@@ -1,7 +1,9 @@
 use Test;
 use EDT-TZ;
+use UTC-TZ;
+use GMT-TZ;
 
-plan 12;
+plan 3 * 12;
 
 # fixtures
 constant dt = -4 * 60 * 60;
@@ -9,15 +11,20 @@ constant name = 'EDT';
 constant tz = name;
 my $tz = EDT-TZ.new();
 
-is($tz.name, name, 'name');
-is($tz.abbreviation(), tz, 'abbr()');
-is($tz.abbreviation(0), 'EDT', 'abbr(0)');
-is($tz.abbreviation(time), 'EDT', 'abbr(now)');
-is($tz.abbreviation(DateTime.new(0)), 'EDT', 'abbr(DateTime)');
-is($tz.utc-offset-in-seconds(), dt, 'offset()');
-is($tz.utc-offset-in-seconds(0), dt, 'offset(0)');
-is($tz.utc-offset-in-seconds(time), dt, 'offset(now)');
-is($tz.utc-offset-in-seconds(DateTime.new(0)), dt, 'offset(DateTime)');
-is(~$tz, tz, ".Str()");
-is(+$tz, dt, ".Numeric()");
-is($tz.Int, dt, ".Int()");
+for ('UTC',  0, UTC-TZ.new),
+    ('GMT',  0, GMT-TZ.new),
+    ('EDT', -4, EDT-TZ.new)
+    -> $name, $hour-offset, $tz {
+    is($tz.name, $name, "name - $name");
+    is($tz.abbreviation(),		  $name,    "abbr() - $name");
+    is($tz.abbreviation(0),		  $name,   "abbr(0) - $name");
+    is($tz.abbreviation(time),		  $name, "abbr(now) - $name");
+    is($tz.abbreviation(DateTime.new(0)), $name, "abbr(DateTime) - $name");
+    is($tz.utc-offset-in-seconds(),		   $hour-offset * 60 * 60,	   "offset() - $name");
+    is($tz.utc-offset-in-seconds(0),		   $hour-offset * 60 * 60,	  "offset(0) - $name");
+    is($tz.utc-offset-in-seconds(time),		   $hour-offset * 60 * 60,	"offset(now) - $name");
+    is($tz.utc-offset-in-seconds(DateTime.new(0)), $hour-offset * 60 * 60, "offset(DateTime) - $name");
+    is(~$tz, $name, ".Str() - $name");
+    is(+$tz, $hour-offset * 60 * 60, ".Numeric() - $name");
+    is($tz.Int, $hour-offset * 60 * 60, ".Int() - $name");
+}
