@@ -1,5 +1,5 @@
 use Test;
-use UTC-TZ;
+use Basic-TZ;
 use Olson-TZ;
 use DateTimeX;
 

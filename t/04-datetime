@@ -14,7 +14,7 @@ isa-ok($dt.local.timezone, Olson-TZ, '.local() preserves timezone class');
 my DateTime  $utc-hot .= new(:year(2014), :month(6), :day(2), :hour(12));
 my DateTime  $ist-hot .= new(:year(2014), :month(6), :day(2), :hour(13), :timezone($tz));	# summer time was in effect
 is $tz.utc-offset-in-seconds($utc-hot.posix), 60 * 60, 'IST summer offset';
-is   $utc-hot.posix - $ist-hot.posix, 0, 'noon UTC is 1P IST in Dublin on summer days';
+is $utc-hot.posix - $ist-hot.posix, 0, 'noon UTC is 1P IST in Dublin on summer days';
 
 my DateTime $utc-cold .= new(:year(2014), :month(2), :day(2), :hour(12));
 my DateTime $gmt-cold .= new(:year(2014), :month(2), :day(2), :hour(12), :timezone($tz));	# standard/gm time was in effect

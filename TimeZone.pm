@@ -11,8 +11,8 @@ class TimeZone {
 	multi method abbreviation(Int $when) returns Str { self.unimplemented(&?ROUTINE); }
 	multi method abbreviation(DateTime $when) returns Str { self.unimplemented(&?ROUTINE); }
 
-	method utc() { ... }
-	method local() { ... }
+	method utc() returns TimeZone { ... }
+	method local() returns TimeZone { ... }
 
 	method Numeric() { self.utc-offset-in-seconds(time) }
 	method Str() { self.abbreviation() }

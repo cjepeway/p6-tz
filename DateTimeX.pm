@@ -1,5 +1,5 @@
 use TimeZone;
-use UTC-TZ;
+use Basic-TZ;
 use Olson-TZ;
 
 class DateTimeX is DateTime {

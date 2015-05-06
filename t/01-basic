@@ -1,7 +1,7 @@
 use Test;
-use EDT-TZ;
-use UTC-TZ;
+use Basic-TZ;
 use GMT-TZ;
+use EDT-TZ;
 
 plan 3 * 12;
 
